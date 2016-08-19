@@ -1,0 +1,115 @@
+<!--{
+	"Path": "/",
+	"Template": true
+}-->
+
+<div class="left">
+<div id="fancy"></div>
+    <a href="http://linuxfj.com" id="start">
+        <span class="big">大家好, 我是FancyGo</span>
+        <span class="desc">
+            <br>最近发现我应该做一点有意义的事情，而不是每天听着策划的摆布。 <br><br>
+            因为我自己比较喜欢Go， <br><br>所以我决定试着翻译一些Go官网上的文章(主要是Document里的)，供大家方便学习。<br><br>
+            有哪些翻译的不恰当的地方，欢迎来喷，我的QQ717632318。<br><br>
+            为了Go的发展，加油。\(^o^)/~
+        </span>
+    </a>
+</div>
+
+<div class="right">
+<div id="about">
+Go是一门开源的编程语言, 它使编程变得更加简洁, 更加可靠, 更加有效率.
+</div>
+
+<div id="gopher"></div>
+
+<a href="https://golang.org/dl/" id="start">
+<span class="big">下载 Go</span>
+<span class="desc">
+二进制的发布版本, 可供Linux, MacOs, Windows等使用.
+</span>
+</a>
+
+</div>
+
+<div style="clear: both"></div>
+
+<div class="left">
+
+<div id="video">
+<div class="rootHeading">特色视频</div>
+<iframe width="415" height="241" src="//www.youtube.com/embed/ytEkHepK08c" frameborder="0" allowfullscreen></iframe>
+</div>
+
+</div>
+
+<div class="right">
+
+<div id="blog">
+<div class="rootHeading">特色文章</div>
+<div class="read"><a href="//blog.golang.org/">阅读更多文章</a></div>
+</div>
+
+</div>
+
+<div style="clear: both;"></div>
+
+<script type="text/javascript">
+
+function readableTime(t) {
+	var m = ["一月", "二月", "三月", "四月", "五月", "六月", "七月",
+		"八月", "九月", "十月", "十一月", "十二月"];
+	var p = t.substring(0, t.indexOf("T")).split("-");
+	var d = new Date(p[0], p[1]-1, p[2]);
+    return d.getFullYear() + "年 " + m[d.getMonth()] + " " + d.getDate() + "日 ";
+}
+
+function feedLoaded(result) {
+	var blog = document.getElementById("blog");
+	var read = blog.getElementsByClassName("read")[0];
+	for (var i = 0; i < result.length && i < 2; i++) {
+		var entry = result[i];
+		var title = document.createElement("a");
+		title.className = "title";
+		title.href = entry.Link;
+		title.innerHTML = entry.Title;
+		blog.insertBefore(title, read);
+		var extract = document.createElement("div");
+		extract.className = "extract";
+		extract.innerHTML = entry.Summary;
+		blog.insertBefore(extract, read);
+		var when = document.createElement("div");
+		when.className = "when";
+		when.innerHTML = readableTime(entry.Time) + "发表";
+		blog.insertBefore(when, read);
+	}
+}
+
+window.initFuncs.push(function() {
+	// Set up playground if enabled.
+
+	// Load blog feed.
+	$('<script/>').attr('text', 'text/javascript')
+		.attr('src', '//blog.golang.org/.json?jsonp=feedLoaded')
+		.appendTo('body');
+
+	// Set the video at random.
+	var videos = [
+		{h: 241, s: "//www.youtube.com/embed/ytEkHepK08c"}, // Tour of Go
+		{h: 241, s: "//www.youtube.com/embed/f6kdp27TYZs"}, // Concurrency Patterns
+		{h: 233, s: "//player.vimeo.com/video/69237265"}    // Simple environment
+	];
+	var v = videos[Math.floor(Math.random()*videos.length)];
+	$('#video iframe').attr('height', v.h).attr('src', v.s);
+
+	//window.playground({
+//		"codeEl":        "#learn .code",
+//		"outputEl":      "#learn .output",
+//		"runEl":         "#learn .run",
+//		"shareEl":       "#learn .share",
+//		"shareRedirect": "//play.golang.org/p/",
+//		"toysEl":        "#learn .toys select"
+//	});
+});
+
+</script>

@@ -1,0 +1,192 @@
+<!--{
+	"Title": "文档",
+	"Path": "/doc/"
+}-->
+
+<p>
+Go语言是一个旨在让编程变得更具生产力开源项目.
+</p>
+
+<p>
+Go具有表达能力强, 简洁, 高效率等特性.<br> 
+它的并发性充分发挥了多核和网络计算机特点, 并且让编程变得如此简单. 
+此外, 它新颖的类型系统让我们能够进行灵活且模块化的编程.
+Go编译迅速, 并且具有垃圾回收机制和运行时反射机制. <br>
+他本身是一门强类型、编译型语言. 但他却也能表现出一些弱类型、解释型语言的影子.
+</p>
+
+<div id="manual-nav"></div>
+
+<h2>安装Go</h2>
+
+<h3><a href="/doc/install">入门</a></h3>
+<p>
+下载并安装Go, 包括编译器, 工具集, 库.
+</p>
+
+<h2 id="learning">学习Go</h2>
+
+<img class="gopher" src="/doc/gopher/doc.png"/>
+
+<h3 id="go_tour"><a href="//tour.golang.org/">Tour Of Go</a></h3>
+<p>
+分三部分对Go进行交互式的介绍.<br> 
+第一部分包括基本的语法和数据结构, 第二部分主要讨论方法和接口, 第三部分介绍了Go原生的并发特性. <br>
+每个部分都有一些练习, 你可以尝试一下已经学到的知识. 
+你可以使用 <a href="//tour.golang.org/">在线 tour</a> 或者
+<a href="//code.google.com/p/go-tour/">安装到本地</a>使用.
+</p>
+
+<h3 id="code"><a href="code.html">怎样编写Go代码</a></h3>
+<p>
+就像该<a href="//www.youtube.com/watch?v=XCsL89YtqCs">screencast</a>里讲的, 
+这个<a href="/cmd/go/">go command</a>也向我们解释了怎么去获取、编译、安装代码包, 以及运行例程.
+</p>
+
+<h3 id="effective_go"><a href="effective_go.html">Effective Go</a></h3>
+<p>
+这篇文档教我们怎么写出清晰的、符合语言习惯的Go代码.<br>
+如果你是Go新手, 一定要仔细阅读. 它是go tour的提升. 
+通读这两篇文章, 你才能写出更好的Go代码. 
+</p>
+
+<h3 id="faq"><a href="/doc/faq">最常见的问题</a></h3>
+<p>
+Go相关的最常见的问题解答.
+</p>
+
+<h3 id="wiki"><a href="/wiki">Go Wiki</a></h3>
+<p>Go社区维护的wiki.</p>
+
+<h4 id="learn_more">更多的内容</h4>
+<p>
+<a href="/wiki">Wiki</a>里的<a href="/wiki/Learn">Learn</a>
+有更多的Go学习资源.
+</p>
+
+<h2 id="references">参考</h2>
+
+<h3 id="pkg"><a href="/pkg/">库文档</a></h3>
+<p>
+Go标准库的文档.
+</p>
+
+<h3 id="cmd"><a href="/doc/cmd">命令文档</a></h3>
+<p>
+Go工具的文档.
+</p>
+
+<h3 id="spec"><a href="/ref/spec">语言详述</a></h3>
+<p>
+Go官方详述文档.
+</p>
+
+<h3 id="go_mem"><a href="/ref/mem">Go内存模型</a></h3>
+<p>
+(求教这段)
+A document that specifies the conditions under which reads of a variable in
+one goroutine can be guaranteed to observe values produced by writes to the
+same variable in a different goroutine.
+
+</p>
+
+<h3 id="release"><a href="/doc/devel/release.html">发布历史</a></h3>
+<p>不同发布版本之间的变化概要.</p>
+
+
+<h2 id="articles">Articles</h2>
+
+<h3 id="blog"><a href="//blog.golang.org/">Go博客</a></h3>
+<p>Go项目的官方博客, 用于发布一些特性新闻, 以及Go团队写的一些有深度的文章.</p>
+
+<h4>代码漫步</h4>
+<p>
+带你你浏览一些Go代码.
+</p>
+<ul>
+<li><a href="/doc/codewalk/functions">Go的一级函数</a></li>
+<li><a href="/doc/codewalk/markov">生成专门的文档: 马尔科夫链算法</a></li>
+<li><a href="/doc/codewalk/sharemem">共享内存之间的通信</a></li>
+<li><a href="/doc/articles/wiki/">编写web应用</a> - 构建一个简单的web应用.</li>
+</ul>
+
+<h4>语言相关</h4>
+<ul>
+<li><a href="/blog/json-rpc-tale-of-interfaces">JSON-RPC: 接口的传说</a></li>
+<li><a href="/blog/gos-declaration-syntax">Go的声明语法</a></li>
+<li><a href="/blog/defer-panic-and-recover">Defer, Panic, 和Recover</a></li>
+<li><a href="/blog/go-concurrency-patterns-timing-out-and">Go并发模式: 超时, moving on</a></li>
+<li><a href="/blog/go-slices-usage-and-internals">Go Slices: 使用方法和内部实现</a></li>
+<li><a href="/blog/gif-decoder-exercise-in-go-interfaces">GIF解码: Go interfaces 的练习</a></li>
+<li><a href="/blog/error-handling-and-go">错误处理</a></li>
+<li><a href="/blog/organizing-go-code">Go代码组织</a></li>
+</ul>
+
+<h4>库</h4>
+<ul>
+<li><a href="/blog/json-and-go">JSON和Go</a> - 使用 <a href="/pkg/encoding/json/">json</a> 库.</li>
+<li><a href="/blog/gobs-of-data">数据格式Gobs</a> - <a href="/pkg/encoding/gob/">gob</a> 库的设计和使用.</li>
+<li><a href="/blog/laws-of-reflection">Reflection的使用法则</a> - <a href="/pkg/reflect/">reflect</a> 库的原理.</li>
+<li><a href="/blog/go-image-package">Go image包</a> - <a href="/pkg/image/">image</a> 库的原理.</li>
+<li><a href="/blog/go-imagedraw-package">Go image/draw包</a> - <a href="/pkg/image/draw/">image/draw</a> 库的原理.</li>
+</ul>
+
+<h4>工具</h4>
+<ul>
+<li><a href="/doc/articles/go_command.html">关于Go command</a> - 为什么我们要它, 它是什么, 它不是什么, 我们怎么使用它.</li>
+<li><a href="/blog/c-go-cgo">C? Go? Cgo!</a> - 使用<a href="/cmd/cgo/">cgo</a>来链接C代码</li>
+<li><a href="/doc/gdb">使用GDB来调试Go代码</a></li>
+<li><a href="/blog/godoc-documenting-go-code">Godoc: Go的代码文档</a> - 编写一个好的文档<a href="/cmd/godoc/">godoc</a>.</li>
+<li><a href="/blog/profiling-go-programs">Go编程简介</a></li>
+<li><a href="/doc/articles/race_detector.html">Data Race Detector</a> - data race 的工具.</li>
+<li><a href="/blog/race-detector">Go Race Detector 的介绍</a> - race detector的介绍.</li>
+<li><a href="/doc/asm">快速浏览Go汇编</a> - 关于Go汇编的介绍.</li>
+</ul>
+
+<h4 id="articles_more">更多文章</h4>
+<p>
+<a href="/wiki">Wiki</a> 的 <a href="/wiki/Articles">Articles page</a> 里有更多关于Go的文章.
+</p>
+
+<h2 id="talks">各方之谈</h2>
+
+<img class="gopher" src="/doc/gopher/talks.png"/>
+
+<h3 id="video_tour_of_go"><a href="http://research.swtch.com/gotour">浏览Go的视频</a></h3>
+<p>
+三个特性让Go运行快速, 有趣, 并且生产力高效:<br>
+接口, 反射, 并发.<br>
+构建一个网页爬虫来显示这些特性.
+</p>
+
+<h3 id="go_code_that_grows"><a href="//vimeo.com/53221560">编码变得优雅</a></h3>
+<p>
+//这段翻译不太懂
+设计Go的关键目标之一就是适应性, 这就要求它设计简单并且在可以在这之上以清晰明了的方式来构建软件. 
+在这个视频里, Andrew Gerrand 描述了一个简单的"聊天轮盘"服务器, 它可以匹配连接进来的TCP. 他使用Go的并发机制, 接口, 和带web接口以及其他特性的标准库来扩展它.
+当该程序的功能戏剧化地变化时, Go的灵活性保持了其最初的设计.
+(原文)One of Go's key design goals is code adaptability; that it should be easy to take a simple design and build upon it in a clean and natural way. 
+In this talk Andrew Gerrand describes a simple "chat roulette" server that matches pairs of incoming TCP connections, and then use Go's concurrency mechanisms, interfaces, and standard library to extend it with a web interface and other features. 
+</p>
+
+<h3 id="go_concurrency_patterns"><a href="//www.youtube.com/watch?v=f6kdp27TYZs">Go 并发模式</a></h3>
+<p>
+并发是设计高性能网络服务的关键所在. Go原生的并发特性(goroutines and channels)提供了一个简单而高效的并发执行的方法. 
+在这个视频中你会看到一段简单的Go代码是如何优雅地解决了一个复杂的并发问题的.
+</p>
+
+<h3 id="advanced_go_concurrency_patterns"><a href="//www.youtube.com/watch?v=QDDwwePbDtw">高级Go 并发模式</a></h3>
+<p>
+这篇<i>Go 并发模式的演讲</i>从源头深入讨论了Go原生的并发模式.
+</p>
+
+<h4 id="talks_more">更多</h4>
+<p>
+这儿<a href="/talks">Go讨论集会地</a> 和 <a href="/wiki/GoTalks">wiki</a> 有更多的关于Go的讨论.
+</p>
+
+
+<h2 id="nonenglish">非英文文档</h2>
+<p>
+这里<a href="/wiki/NonEnglish">非英文</a>有本地化过的<a href="/wiki">Wiki</a>.
+</p>
