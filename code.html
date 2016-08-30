@@ -5,46 +5,44 @@
 <h2 id="Introduction">简介</h2>
 
 <p>
-这篇文档展示了如何开发一个简单的Go程序,介绍了<a href="/cmd/go/">go tool</a>,
-以及获取,编译,安装Go代码包和命令的标准方法.
+这篇文档演示了一个简单Go包(package)的开发过程并介绍了<a href="/cmd/go/">go tool</a>使用方式,
+以及获取,编译,安装Go包(package)和命令的标准方法.
 </p>
 
 <p>
-go tool 要求你以一个明确的方式去组织你的代码。
+go tool 要求使用一种特定的方式来组织代码。
 请仔细阅读这份文档。
-它向你解释了如何用最简单的方法运行Go。
+它解释了如何用最简单的方式创建和运行Go。
 </p>
 
 <h2 id="Organization">代码组织</h2>
 
-<h3 id="Overview">概括</h3>
+<h3 id="Overview">概述</h3>
 
 <ul>
-	<li>通常，Go程序员把他们所有的Go代码保存在单个的 <i>workspace</i>里.</li>
-	<li>一个工作空间包含了多个 <i>repositories</i>
-	    (比如用Git管理的repositories).</li>
-	<li>每个repository 包含了一个或多个 <i>packages</i>.</li>
-	<li>每个package 一个或多个存放在单独目录的Go 源码文件.</li>
-	<li>每个package 的路径决定了它的 <i>import path</i>.</li>
+	<li>通常，Go程序员把所有的Go代码保存在单个的 <i>工作空间</i>里.</li>
+	<li>一个工作空间包含了多个版本控制 <i>仓库</i>
+	    (比如用Git管理的仓库).</li>
+	<li>每个仓库包含了一个或多个 <i>包(packages)</i>.</li>
+	<li>在单个目录中的每个包(package) 由一个或多个Go源文件组成.</li>
+	<li>指向包(package)目录的路径决定了 <i>import path</i>.</li>
 </ul>
 
 <p>
-注意
-Note that this differs from other programming environments in which every
-project has a separate workspace and workspaces are closely tied to version
-control repositories.
+注意：这种组织方式不同于所有工程都有一个独立的工作空间和工作空间与版本控制仓库紧密相连的
+其他编程环境.
 </p>
 
-<h3 id="Workspaces">Workspaces</h3>
+<h3 id="Workspaces">工作空间</h3>
 
 <p>
-A workspace is a directory hierarchy with three directories at its root:
+工作空间是一个在根目录有三个目录的目录层级:
 </p>
 
 <ul>
-<li><code>src</code> 用于存放Go源代码,
-<li><code>pkg</code> 用于存放库文件库,
-<li><code>bin</code> 用于存放可执行文件。
+<li><code>src</code> 包含Go源文件,
+<li><code>pkg</code> 包含包(package)对象,
+<li><code>bin</code> 包含可执行文件。
 </ul>
 
 <p>
@@ -52,11 +50,11 @@ go tool 编译源代码并将生成的二进制文件安装到pkg和bin目录。
 </p>
 
 <p>
-<code>src</code> 目录通常包含多个版本控制库，如此可以跟踪一个或多个源代码包。
+<code>src</code> 子目录通常包含多个版本控制库，如此可以追踪一个或多个源代码包的开发过程。
 </p>
 
 <p>
-下面这个例子将给你展示实际编码过程中工作目录是什么样的：
+下面这个例子展示在实践中工作目录是什么样的：
 </p>
 
 <pre>
@@ -91,32 +89,32 @@ src/
 (<code>example</code> 和 <code>image</code>).
 <code>example</code> 仓库包含两个可执行文件 (<code>hello</code> 和 
 <code>outyet</code>) 和一个静态库 (<code>stringutil</code>).
-<code>image</code> 仓库包含了 <code>bmp</code> 库以及
-<a href="https://godoc.org/golang.org/x/image">其他代码</a>.
+<code>image</code> 仓库包含了 <code>bmp</code> 包以及
+<a href="https://godoc.org/golang.org/x/image">一些其他包</a>.
 </p>
 
 <p>
-一个典型的工作空间包含的多个仓库包含了多个库和可执行文件。
-大部分的Go程序员把他们所有的Go源码和依赖库放在同一个工作空间。
+通常一个工作空间包含多个含有许多包和可执行文件的仓库。
+大部分的Go程序员把所有的Go源码和依赖库放在同一个工作空间。
 </p>
 
 <p>
-可执行文件和库文件从不同的源代码编译而来。我们后面会讨论他们的不同。
+可执行文件和依赖库从不同的源包码编译而来。后面会讨论他们之间的不同。
 </p>
 
 
-<h3 id="GOPATH">The <code>GOPATH</code> 环境变量</h3>
+<h3 id="GOPATH"><code>GOPATH</code> 环境变量</h3>
 
 <p>
-<code>GOPATH</code> 环境变量指定了你的工作空间的位置。在你使用Go开发的时候，它是你
+<code>GOPATH</code> 环境变量指定了工作空间的位置。在使用Go开发的时候，可能是
 唯一需要设置的环境变量。
 </p>
 
 <p>
-刚开始，创建一个工作空间并把它设置为<code>GOPATH</code>。
-又可以设置任意你喜欢的路径作为工作空间，我们在文档里使用<code>$HOME/work</code>作为工作空间。
-这个路径和你安装的路径并不一定要相同。
-(Another common setup is to set <code>GOPATH=$HOME</code>.)
+刚开始，创建一个工作空间相应的把它设置为<code>GOPATH</code>。
+可以设置任何位置作为工作空间，在这篇文档里使用<code>$HOME/work</code>作为工作空间。
+这个路径与你安装的路径并不一定要相同。
+(其他的通用设置是<code>GOPATH=$HOME</code>.)
 </p>
 
 <pre>
@@ -133,7 +131,7 @@ $ <b>export PATH=$PATH:$GOPATH/bin</b>
 </pre>
 
 <p>
-如果你想学习更多的有关设置 <code>GOPATH</code> 环境变量的知识，请参阅
+如果想学习更多有关设置 <code>GOPATH</code> 环境变量的知识，请参阅
 <a href="/cmd/go/#hdr-GOPATH_environment_variable"><code>go help gopath</code></a>
 </p>
 
