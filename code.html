@@ -5,46 +5,44 @@
 <h2 id="Introduction">简介</h2>
 
 <p>
-这篇文档展示了如何开发一个简单的Go程序,介绍了<a href="/cmd/go/">go tool</a>,
-以及获取,编译,安装Go代码包和命令的标准方法.
+这篇文档演示了一个简单Go包(package)的开发过程并介绍了<a href="/cmd/go/">go tool</a>使用方式,
+以及获取,编译,安装Go包(package)和命令的标准方法.
 </p>
 
 <p>
-go tool 要求你以一个明确的方式去组织你的代码。
+go tool 要求使用一种特定的方式来组织代码。
 请仔细阅读这份文档。
-它向你解释了如何用最简单的方法运行Go。
+它解释了如何用最简单的方式创建和运行Go。
 </p>
 
 <h2 id="Organization">代码组织</h2>
 
-<h3 id="Overview">概括</h3>
+<h3 id="Overview">概述</h3>
 
 <ul>
-	<li>通常，Go程序员把他们所有的Go代码保存在单个的 <i>workspace</i>里.</li>
-	<li>一个工作空间包含了多个 <i>repositories</i>
-	    (比如用Git管理的repositories).</li>
-	<li>每个repository 包含了一个或多个 <i>packages</i>.</li>
-	<li>每个package 一个或多个存放在单独目录的Go 源码文件.</li>
-	<li>每个package 的路径决定了它的 <i>import path</i>.</li>
+	<li>通常，Go程序员把所有的Go代码保存在单个的 <i>工作空间</i>里.</li>
+	<li>一个工作空间包含了多个版本控制 <i>仓库</i>
+	    (比如用Git管理的仓库).</li>
+	<li>每个仓库包含了一个或多个 <i>包(packages)</i>.</li>
+	<li>在单个目录中的每个包(package) 由一个或多个Go源文件组成.</li>
+	<li>指向包(package)目录的路径决定了 <i>import path</i>.</li>
 </ul>
 
 <p>
-注意
-Note that this differs from other programming environments in which every
-project has a separate workspace and workspaces are closely tied to version
-control repositories.
+注意：这种组织方式不同于所有工程都有一个独立的工作空间和工作空间与版本控制仓库紧密相连的
+其他编程环境.
 </p>
 
-<h3 id="Workspaces">Workspaces</h3>
+<h3 id="Workspaces">工作空间</h3>
 
 <p>
-A workspace is a directory hierarchy with three directories at its root:
+工作空间是一个在根目录有三个目录的目录层级:
 </p>
 
 <ul>
-<li><code>src</code> 用于存放Go源代码,
-<li><code>pkg</code> 用于存放库文件库,
-<li><code>bin</code> 用于存放可执行文件。
+<li><code>src</code> 包含Go源文件,
+<li><code>pkg</code> 包含包(package)对象,
+<li><code>bin</code> 包含可执行文件。
 </ul>
 
 <p>
@@ -52,11 +50,11 @@ go tool 编译源代码并将生成的二进制文件安装到pkg和bin目录。
 </p>
 
 <p>
-<code>src</code> 目录通常包含多个版本控制库，如此可以跟踪一个或多个源代码包。
+<code>src</code> 子目录通常包含多个版本控制库，如此可以追踪一个或多个源代码包的开发过程。
 </p>
 
 <p>
-下面这个例子将给你展示实际编码过程中工作目录是什么样的：
+下面这个例子展示在实践中工作目录是什么样的：
 </p>
 
 <pre>
@@ -91,32 +89,32 @@ src/
 (<code>example</code> 和 <code>image</code>).
 <code>example</code> 仓库包含两个可执行文件 (<code>hello</code> 和 
 <code>outyet</code>) 和一个静态库 (<code>stringutil</code>).
-<code>image</code> 仓库包含了 <code>bmp</code> 库以及
-<a href="https://godoc.org/golang.org/x/image">其他代码</a>.
+<code>image</code> 仓库包含了 <code>bmp</code> 包以及
+<a href="https://godoc.org/golang.org/x/image">一些其他包</a>.
 </p>
 
 <p>
-一个典型的工作空间包含的多个仓库包含了多个库和可执行文件。
-大部分的Go程序员把他们所有的Go源码和依赖库放在同一个工作空间。
+通常一个工作空间包含多个含有许多包和可执行文件的仓库。
+大部分的Go程序员把所有的Go源码和依赖库放在同一个工作空间。
 </p>
 
 <p>
-可执行文件和库文件从不同的源代码编译而来。我们后面会讨论他们的不同。
+可执行文件和依赖库从不同的源包码编译而来。后面会讨论他们之间的不同。
 </p>
 
 
-<h3 id="GOPATH">The <code>GOPATH</code> 环境变量</h3>
+<h3 id="GOPATH"><code>GOPATH</code> 环境变量</h3>
 
 <p>
-<code>GOPATH</code> 环境变量指定了你的工作空间的位置。在你使用Go开发的时候，它是你
+<code>GOPATH</code> 环境变量指定了工作空间的位置。在使用Go开发的时候，可能是
 唯一需要设置的环境变量。
 </p>
 
 <p>
-刚开始，创建一个工作空间并把它设置为<code>GOPATH</code>。
-又可以设置任意你喜欢的路径作为工作空间，我们在文档里使用<code>$HOME/work</code>作为工作空间。
-这个路径和你安装的路径并不一定要相同。
-(Another common setup is to set <code>GOPATH=$HOME</code>.)
+刚开始，创建一个工作空间相应的把它设置为<code>GOPATH</code>。
+可以设置任何位置作为工作空间，在这篇文档里使用<code>$HOME/work</code>作为工作空间。
+这个路径与你安装的路径并不一定要相同。
+(其他的通用设置是<code>GOPATH=$HOME</code>.)
 </p>
 
 <pre>
@@ -133,34 +131,34 @@ $ <b>export PATH=$PATH:$GOPATH/bin</b>
 </pre>
 
 <p>
-如果你想学习更多的有关设置 <code>GOPATH</code> 环境变量的知识，请参阅
+如果想学习更多有关设置 <code>GOPATH</code> 环境变量的知识，请参阅
 <a href="/cmd/go/#hdr-GOPATH_environment_variable"><code>go help gopath</code></a>
 </p>
 
 <h3 id="ImportPaths">Import paths</h3>
 
 <p>
-<i>import path</i> 是一个唯一的字符串标识用来代表一个代码包。
-一个代码包的 import path 反映了它在工作空间的位置或者一个远程代码库(稍后解释)。
+<i>import path</i> 是唯一确认一个包的字符串。
+一个包的导入路径与它在工作目录中的位置或远程仓库的位置一致（下面给出解释）。
 </p>
 
 <p>
-标准库里的代码包会以一些简短的 import paths 命名比如<code>"fmt"</code> and <code>"net/http"</code>之类。
-你自己的代码包，你需要选则一个基础的路径，而它不能与基础库或者扩展库的命名冲突。
+标准库里的包(package)会用一些简短的 import paths比如<code>"fmt"</code> 和 <code>"net/http"</code>之类。
+自定义包(package)，必须选择一个基本路径并且不能与将来添加到标准库或外部库的路径相冲突。
 </p>
 
 <p>
-如果你把代码保存在一个地方，你需要将代码的根目录设置为基础路径。
-比如你有一个 <a href="https://github.com/">GitHub</a> 账户 <code>github.com/user</code>，这就可以作为你的基础路径。
+如果将代码保存在源仓库的某个地方，则需要使用源仓库的跟目录作为基本路径。
+比如，假设你有一个 <a href="https://github.com/">GitHub</a> 账户 <code>github.com/user</code>，这就可以作为基础路径。
 </p>
 
 <p>
-注意在你编译过之前不要发布到远程仓库。如果你觉得你有可能在某一天发布你的代码，那么组织好你的代码将是一个好的习惯。
-你可以选择任意的路径名字，只要不会和标准库和Go语言系统冲突就好。
+注意在代码编译通过之前不要将其发布到远程仓库。如果在将来的某一天发布代码，这将对组织代码是一个好习惯。
+实际上可以选择任意的路径名，只要它对标准库和Go语言系统是唯一的就好。
 </p>
 
 <p>
-我们使用 <code>github.com/user</code> 作为基础路径。在其中创建一个目录用来保存源代码：
+我们将使用 <code>github.com/user</code> 作为基础路径。在工作目录中创建一个目录用来保存源代码：
 </p>
 
 <pre>
@@ -170,8 +168,7 @@ $ <b>mkdir -p $GOPATH/src/github.com/user</b>
 <h3 id="Command">第一个程序 </h3>
 
 <p>
-为了编译运行一个简单的程序，首先选择一个路径(我们使用 <code>github.com/user/hello</code>)来创建相应的包目录：
-inside your workspace:
+为了编译运行一个简单的程序，首先选择一个路径(我们使用 <code>github.com/user/hello</code>)并在工作空间创建相应的包目录：
 </p>
 
 <pre>
@@ -179,7 +176,7 @@ $ <b>mkdir $GOPATH/src/github.com/user/hello</b>
 </pre>
 
 <p>
-然后，创建一个名叫 <code>hello.go</code> 的文件，包含下面的代码。
+然后，在目录中创建一个名为 <code>hello.go</code> 的文件，包含下面的Go代码。
 </p>
 
 <pre>
@@ -193,7 +190,7 @@ func main() {
 </pre>
 
 <p>
-现在你可以使用 <code>go</code> tool 来编译安装你的程序。
+现在你可以使用 <code>go</code> tool 来编译安装程序。
 </p>
 
 <pre>
@@ -201,12 +198,12 @@ $ <b>go install github.com/user/hello</b>
 </pre>
 
 <p>
-注意，你可以在你系统的任意位置运行这个命令。<code>go</code> tool 通过设置在 <code>GOPATH</code> 
-里的工作空间名 <code>github.com/user/hello</code> 来找到源代码的位置。
+注意，可以在系统的任意位置执行这个命令。<code>go</code> tool 通过指定的 <code>GOPATH</code> 环境变量
+在工作空间中查找 <code>github.com/user/hello</code>包(package)中的源代码。
 </p>
 
 <p>
-如果你直接从代码包目录运行 <code>go install</code> 那么你可以省略包的路径：
+如直接在包(package)目录执行 <code>go install</code> 命令则可以省略包的路径：
 </p>
 
 <pre>
@@ -215,7 +212,7 @@ $ <b>go install</b>
 </pre>
 
 <p>
-这个命令编译出一个名叫hello的可执行文件，然后把它安装到工作空间的bin目录。
+这个命令编译出可执行文件hello(windows下是hello.exe)，然后把可执行文件安装到工作空间的bin目录。
 </p>
 
 <p>
@@ -223,7 +220,7 @@ $ <b>go install</b>
 </p>
 
 <p>
-现在你可以使用决定路径来运行它：
+现在可以在命令行通过键入完整路径来执行程序：
 </p>
 
 <pre>
@@ -232,7 +229,7 @@ Hello, world.
 </pre>
 
 <p>
-或者你已经把 <code>$GOPATH/bin</code> 添加到环境变量的 <code>PATH</code> 中，那么你只需要键入可执行文件名称：
+或者如果已经把 <code>$GOPATH/bin</code> 添加到环境变量 <code>PATH</code> 中，则只需要键入可执行文件名：
 </p>
 
 <pre>
@@ -242,7 +239,7 @@ Hello, world.
 
 <p>
 如果你使用版本控制系统，现在是时候创建一个仓库，添加代码，并把它提交。
-再次说明：你并不一定要使用版本控制系统来写代码。
+再次说明：这一步是可选的，你可能并不需要版本控制系统写Go代码。
 </p>
 
 <pre>
@@ -257,18 +254,18 @@ $ <b>git commit -m "initial commit"</b>
 </pre>
 
 <p>
-读者们可以练习一下怎么把代码发布到远程仓库，在这里我们就不介绍了。
+读者们可以练习一下如何把代码推送到远程仓库，在这里就不介绍了。
 </p>
 
 
 <h3 id="Library">第一个库</h3>
 
 <p>
-让我们来写一个 library 然后在 <code>hello</code> 中使用。
+让我们来写一个 library 然后在 <code>hello</code> 程序中使用。
 </p>
 
 <p>
-同样，第一步我们创建一个 package path (<code>github.com/user/stringutil</code>) 目录：
+同样，第一步创建一个包(package)路径 (我们使用<code>github.com/user/stringutil</code>) 并创建包(package)目录：
 </p>
 
 <pre>
@@ -302,7 +299,7 @@ $ <b>go build github.com/user/stringutil</b>
 </pre>
 
 <p>
-你也可以直接在源码目录执行：
+或者也可以直接在包源目录执行：
 </p>
 
 <pre>
@@ -310,11 +307,11 @@ $ <b>go build</b>
 </pre>
 
 <p>
-这并不会输出一个文件。如果你想这么做，使用 <code>goinstall</code>，它会在 <code>pkg</code> 目录里生成一个包。
+这并不会产生一个输出文件。如果要生成输出文件，必须使用 <code>go install</code>，这将会把包对象放置在工作目录的 <code>pkg</code> 目录中。
 </p>
 
 <p>
-确认 <code>stringutil</code> 包编译好之后，修改 <code>hello.go</code> 使用这个包:
+在确认 <code>stringutil</code> 包可以编译之后，在源文件 <code>hello.go</code>(在$GOPATH/src/github.com/user/hello中) 中使用这个包:
 </p>
 
 <pre>
@@ -332,8 +329,8 @@ func main() {
 </pre>
 
 <p>
-当 <code>go</code> 编译安装二进制文件和包的时候，会同时把它依赖的包都安装上。
-所以当你安装 <code>hello</code> 的时候
+无论何时使用 <code>go</code> tool编译安装二进制文件或包的时候，会同时把它依赖的包都安装上。
+所以当编译 <code>hello</code> 程序的时候
 </p>
 
 <pre>
@@ -341,11 +338,11 @@ $ <b>go install github.com/user/hello</b>
 </pre>
 
 <p>
-<code>stringutil</code> 也将自动被安装。
+<code>stringutil</code> 也将自动被编译。
 </p>
 
 <p>
-运行新的程序，你会看到一个新的消息：
+执行新的程序，将会看到一个新的，反过来的信息：
 </p>
 
 <pre>
@@ -354,7 +351,7 @@ Hello, Go!
 </pre>
 
 <p>
-经过上面的步骤后，你的工作空间结构会如下：
+经过上面的步骤后，你的工作空间结构会像这样：
 </p>
 
 <pre>
@@ -373,41 +370,41 @@ src/
 </pre>
 
 <p>
-注意 <code>go install</code> 会把 <code>stringutil.a</code> 放到 <code>pkg/linux_amd64</code> 里，它是源目录的镜像。
-这是为了以后的 <code>go</code> tool 可以直接找到该包，而不用重新编译它。 
-<code>linux_amd64</code> 是为了反映交叉编译的操作系统和架构。
+注意 <code>go install</code> 会把 <code>stringutil.a</code> 文件放到 <code>pkg/linux_amd64</code> 下与它源目录相对应的目录里，它是源目录的镜像。
+这是为了以后 <code>go</code> tool 可以直接找到该包文件，而不用重新编译它。 
+<code>linux_amd64</code> 部分对交叉编译有帮助，这将反应出你所使用的操作系统和架构。
 </p>
 
 <p>
-Go可执行命令是静态链接的，包并不需要对当前运行的Go程序可见。
+Go命令执行是静态链接，包对象并不需要对当前执行的Go程序可见。
 </p>
 
 
-<h3 id="PackageNames">Package 名字</h3>
+<h3 id="PackageNames">包名</h3>
 
 <p>
-Go源程序必须以
+Go源文件的第一句必须是
 </p>
 
 <pre>
-package <i>name</i> 作为开头
+package <i>name</i>
 </pre>
 
 <p>
-<code><i>name</i></code> 是 package 默认名字可用作 imports.
-(一个 package 内的所有文件必须使用相同的 <code><i>name</i></code>.)
+<code><i>name</i></code> 导入包的默认名字.
+(同一个包(package)内的所有文件必须使用相同的 <code><i>name</i></code>.)
 </p>
 
 <p>
-Go的惯例是把import path的最后一部分作为package名，比如import path <code>crypto/rot13</code> 的名字就是 <code>rot13</code>。
+Go的惯例是把import path的最后一个元素作为包(package)名，比如导入<code>crypto/rot13</code>路径，则包名就是 <code>rot13</code>。
 </p>
 
 <p>
-可执行的主文件必须使用 <code>package main</code>。
+可执行文件必须使用 <code>package main</code>。
 </p>
 
 <p>
-并不是说所有链接到一个可执行文件的package的包名都要是唯一的，只有那些被import的路径名(绝对路径)必须是唯一的。
+并不是说所有链接到一个可执行文件的所有包(package)的包名都要是唯一的，只要那些被import的路径名(绝对路径)是唯一的。
 </p>
 
 <p>
@@ -415,19 +412,19 @@ Go的惯例是把import path的最后一部分作为package名，比如import pa
 </p>
 
 
-<h2 id="Testing">Testing</h2>
+<h2 id="Testing">测试</h2>
 
 <p>
-Go拥有一个由 go test 命令和 testing package 组成的轻量级的test框架。
+Go拥有一个由 go test 命令和 testing package 组成的轻量级的测试框架。
 </p>
 
 <p>
-创建一个以_test.go为后缀名的文件，它包含了各种以TestXXX为函数名，以func (t *testing.T)为标签的函数。
-test框架将会运行其中的每一个函数。如果函数调用了比如t.Error或者t.Fail，则表示test失败。
+创建一个以_test.go为后缀名的测试程序，其中包含了以TestXXX命名，以func (t *testing.T)为标签的函数。
+test框架将会执行每一个这样的函数。如果函数调用了像t.Error或者t.Fail的失败函数，则表示测试已经失败了。
 </p>
 
 <p>
-在 <code>stringutil</code> package 里添加一个test文件 <code>$GOPATH/src/github.com/user/stringutil/reverse_test.go</code> 包含以下代码:
+在 <code>stringutil</code> 包(package)里添加一个测试文件 <code>$GOPATH/src/github.com/user/stringutil/reverse_test.go</code> 并包含以下代码:
 </p>
 
 <pre>
@@ -453,7 +450,7 @@ func TestReverse(t *testing.T) {
 </pre>
 
 <p>
-然后使用 go test 来运行这个test：
+然后使用 go test 来执行这个test程序：
 </p>
 
 <pre>
@@ -462,7 +459,7 @@ ok  	github.com/user/stringutil 0.165s
 </pre>
 
 <p>
-按照惯例，如果你在package目录下面运行 go tool，你可以省略包路径：
+像往常一样，如果在包(package)目录下面执行 go tool，则可以省略包(package)路径：
 </p>
 
 <pre>
@@ -471,18 +468,18 @@ ok  	github.com/user/stringutil 0.165s
 </pre>
 
 <p>
-执行 go help test，或者阅读 <a href="/pkg/testing/">testing package documentation</a>，你可以看到更多的细节。
+执行 go help test命令查看更多关于 <a href="/pkg/testing/">测试包的文档</a>。
 </p>
 
 
-<h2 id="remote">Remote packages</h2>
+<h2 id="remote">远程包</h2>
 
 <p>
-import path 描述怎么从一个版本控制系统(Git或者Mercurial)获取这个package的源码
-go tool 正是使用这个特性从远程仓库获取packages。
-比如，这个文档里的所有例子都在GitHub的Git仓库里，
-<code><a href="https://github.com/golang/example">github.com/golang/example</a></code>.
-如果你想包含这个远程库，go get 命令可以帮你拉取代码，并自动编译安装。
+导入路径(import path)能够描述如何使用版本控制系统(Git或者Mercurial)获取这个包(package)的源码。
+go tool通过使用这个特性从远程仓库获取packages。
+比如，这个文档里所描述的例子都在GitHub 
+<code><a href="https://github.com/golang/example">github.com/golang/example</a></code>管理的Git仓库中.
+如果在包的import path中包含仓库的URL，go get 命令将自动获取，编译，安装(生成可执行文件)它。
 </p>
 
 <pre>
@@ -492,12 +489,12 @@ Hello, Go examples!
 </pre>
 
 <p>
-如果工作空间里没有这个指定的package，那么 go get 会把它存放到 GOPATH 里的第一个路径。
-如果这个package已经存在了，那么 go get 会跳过拉取动作，直接执行 go install 动作。
+如果指定的包(package)不在工作空间中，那么 go get 会把它存放到 GOPATH 指定的第一个工作空间中。
+（如果这个package已经存在了，那么 go get 会跳过获取动作，与直接执行go install执行的效果一样。）
 </p>
 
 <p>
-在使用了上面的 go get 命令后，工作空间目录树将会像如下显示：
+在使用了上面的 go get 命令后，工作空间目录树将会像这样：
 </p>
 
 <pre>
@@ -526,11 +523,10 @@ src/
 </pre>
 
 <p>
-The <code>hello</code> command hosted at GitHub depends on the
-<code>stringutil</code> package within the same repository. The imports in
-<code>hello.go</code> file use the same import path convention, so the
-<code>go get</code> command is able to locate and install the dependent
-package, too.
+在GitHub上托管的可执行文件<code>hello</code>依赖于同一个仓库的
+<code>stringutil</code> 包(package). The imports in
+<code>hello.go</code>文件中的imports按照惯例使用同样路径, 因此
+<code>go get</code>命令也可以定位和安装独立的包(package)。
 </p>
 
 <pre>
@@ -538,26 +534,26 @@ import "github.com/golang/example/stringutil"
 </pre>
 
 <p>
-按照惯例，你应该让你的Go packages方便别人使用。
+按照惯例，这可以很方便让别人使用你的Go包(package)。
 <a href="//golang.org/wiki/Projects">Go Wiki</a>
 和 <a href="//godoc.org/">godoc.org</a>
-提供了一系列的Go项目供你使用。
+提供了一系列的外部的Go项目。
 </p>
 
 <p>
-如果你想获得更多有关通过 go tool 使用远程仓库的知识，你可以阅读<code><a href="/cmd/go/#hdr-Remote_import_paths">go help importpath</a></code>。
+如果想获得更多有关通过 go tool 使用远程仓库的信息，可以查看<code><a href="/cmd/go/#hdr-Remote_import_paths">go help importpath</a></code>。
 </p>
 
 
-<h2 id="next">What's next</h2>
+<h2 id="next">下一步呢？</h2>
 
 <p>
 订阅 <a href="//groups.google.com/group/golang-announce">golang-announce</a> 邮件列表，这样，当一个新的稳定版本发布的时候，
-你可以第一时间得到通知。
+以便第一时间可以通知到你。
 </p>
 
 <p>
-阅读 <a href="/doc/effective_go.html">Effective Go</a> 里的建议，你可以写出更加清晰的，符合语言惯例的Go代码。
+阅读 <a href="/doc/effective_go.html">Effective Go</a> 关于写出简洁、惯用的Go代码的一些建议。
 </p>
 
 <p>
@@ -565,20 +561,23 @@ import "github.com/golang/example/stringutil"
 </p>
 
 <p>
-阅览 <a href="/doc/#articles">documentation page</a> 可以看到一些深层次的关于Go语言以及它的各种库的文章。
+阅览 <a href="/doc/#articles">documentation page</a> 可以看到一些深层次的关于Go语言以及它的各种库和工具的文章。
 </p>
 
 
 <h2 id="help">获取帮助</h2>
 
 <p>
-你可以在 <a href="http://freenode.net/">Freenode</a> 上获取gopher的实时帮助。
+可以使用 <code>#go-nuts</code>在
+<a href="http://freenode.net/">Freenode</a> IRC server获取热心人的实时帮助.
 </p>
 
 <p>
-用来讨论Go语言的官方邮件列表 <a href="//groups.google.com/group/golang-nuts">Go Nuts</a> 。
+官方讨论Go语言的邮件列表是
+<a href="//groups.google.com/group/golang-nuts">Go Nuts</a>.
 </p>
 
 <p>
-如果你想报告bugs，使用 <a href="//golang.org/issue">Go issue tracker</a>。
+使用<a href="//golang.org/issue">Go issue tracker
+来上报BUG</a>.
 </p>
